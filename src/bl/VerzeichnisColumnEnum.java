@@ -1,14 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package bl;
 
-/**
- *
- * @author herbe
- */
 public enum VerzeichnisColumnEnum {
+    BEZ("Bezeichnung"), ANSCH("AK"), DATUM("Inbetriebnahme"), 
+    NUTZD("ND"), NUTZDBISH("bisherige ND"), AFABISH("Afa bisher"), 
+    VORAFA("Wert vor Afa"), AFAJAHR("Afa dieses Jahres"), BARWERT("BW 31.12.");
     
+    private String name;
+
+    private VerzeichnisColumnEnum(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
 }
