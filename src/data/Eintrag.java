@@ -7,12 +7,11 @@ public class Eintrag {
 
     
     public Eintrag(String line, double year) {
-         
         String[] token = line.split(";");
         this.bez = token[0];
-        this.ak = Double.parseDouble(token[1]);
+        this.ak = Double.parseDouble(token[1].replace(",", "."));
         this.datum = Double.parseDouble(token[2].replace(",", "."));
-        this.nd = Double.parseDouble(token[3]);
+        this.nd = Double.parseDouble(token[3].replace(",", "."));
     
         this.ndbish = year-this.datum;
         this.afajahr = this.ak / this.nd;
