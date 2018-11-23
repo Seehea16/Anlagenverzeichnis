@@ -7,10 +7,15 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 public class VerzeichnisTableModel extends AbstractTableModel {
-    private ArrayList<Eintrag> list;
+    private List<Eintrag> list;
+
+    public VerzeichnisTableModel() {
+        this.list = new ArrayList<>();
+    }
     
     @Override
     public int getRowCount() {
@@ -38,19 +43,19 @@ public class VerzeichnisTableModel extends AbstractTableModel {
         VerzeichnisColumnEnum enumIndex = VerzeichnisColumnEnum.values()[columnIndex];
         switch(enumIndex) {
             case BEZ: return e.getBez();
-            case ANSCH: return e.getAk()+"".replace(".", ",");
-            case DATUM: return e.getDatum()+"".replace(".", ",");
-            case NUTZD: return e.getNd()+"".replace(".", ",");
-            case NUTZDBISH: return e.getNdbish()+"".replace(".", ",");
-            case AFABISH: return e.getAfabish()+"".replace(".", ",");
-            case VORAFA: return e.getVorafa()+"".replace(".", ",");
-            case AFAJAHR: return e.getAfajahr()+"".replace(".", ",");
-            case BARWERT: return e.getBarwert()+"".replace(".", ",");
+            case ANSCH: return e.getAk();
+            case DATUM: return String.format("%.1f", e.getDatum()).replace(".", ",");
+            case NUTZD: return String.format("%.2f", (e.getNd() <= 0 ? 0 : e.getNd())).replace(".", ",");
+            case NUTZDBISH: return String.format("%.1f", (e.getNdbish() <= 0 ? 0 : e.getNdbish())).replace(".", ",");
+            case AFABISH: return String.format("%.2f", (e.getAfabish() <= 0 ? 0 : e.getAfabish())).replace(".", ",");
+            case VORAFA: return String.format("%.2f", (e.getVorafa() <= 0 ? 0 : e.getVorafa())).replace(".", ",");
+            case AFAJAHR: return String.format("%.2f", (e.getAfajahr() <= 0 ? 0 : e.getAfajahr())).replace(".", ",");
+            case BARWERT: return String.format("%.2f", (e.getBarwert() <= 0 ? 0 : e.getBarwert())).replace(".", ",");
             default: return "?";
         }
     }
     
-    public void load(File f, double year) throws Exception {
+    public void load(File f, int year) throws Exception {
         this.clear();
         FileReader fr = null;
         BufferedReader br = null;
