@@ -1,21 +1,20 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gui;
 
-/**
- *
- * @author herbe
- */
-public class AnlagenverzeichnisGUI extends javax.swing.JFrame {
+import bl.VerzeichnisTableModel;
+import bl.VerzeichnisTableRenderer;
+import java.io.File;
+import javax.swing.JOptionPane;
 
-    /**
-     * Creates new form AnlagenverzeichnisGUI
-     */
+public class AnlagenverzeichnisGUI extends javax.swing.JFrame {
+    private final VerzeichnisTableModel MODEL;
+    private final File FILE;
+    
     public AnlagenverzeichnisGUI() {
         initComponents();
+        this.MODEL = new VerzeichnisTableModel();
+        this.tabelle.setModel(MODEL);
+        this.tabelle.setDefaultRenderer(String.class, new VerzeichnisTableRenderer());
+        this.FILE = new File("anlagenverzeichnis.csv");
     }
 
     /**
@@ -29,7 +28,7 @@ public class AnlagenverzeichnisGUI extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cbYear = new javax.swing.JComboBox<>();
         jButton1 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -40,22 +39,28 @@ public class AnlagenverzeichnisGUI extends javax.swing.JFrame {
         tabelle = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                open(evt);
+            }
+        });
 
         jPanel1.setLayout(new java.awt.GridLayout(1, 7));
 
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel1.setText("Year");
         jPanel1.add(jLabel1);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jComboBox1);
+        cbYear.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025", "2026", "2027", "2028", "2029", "2030", "2031", "2032", "2033", "2034", "2035", "2036", "2037", "2038", "2039", "2040", "2041", "2042", "2043", "2044", "2045", "2046", "2047", "2048", "2049", "2050" }));
+        cbYear.setSelectedIndex(16);
+        jPanel1.add(cbYear);
 
         jButton1.setText("Update Table");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                update(evt);
+            }
+        });
         jPanel1.add(jButton1);
         jPanel1.add(jLabel2);
         jPanel1.add(jLabel3);
@@ -87,9 +92,13 @@ public class AnlagenverzeichnisGUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    private void open(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_open
+        this.laden();
+    }//GEN-LAST:event_open
+
+    private void update(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_update
+        this.laden();
+    }//GEN-LAST:event_update
 
     /**
      * @param args the command line arguments
@@ -127,8 +136,8 @@ public class AnlagenverzeichnisGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> cbYear;
     private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -139,4 +148,12 @@ public class AnlagenverzeichnisGUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tabelle;
     // End of variables declaration//GEN-END:variables
+
+    private void laden() {
+        try {
+            this.MODEL.load(this.FILE , Integer.parseInt(this.cbYear.getSelectedItem()+""));
+        } catch(Exception ex) {
+            JOptionPane.showMessageDialog(this, "Fehler beim Öffnen der Datei!", "Fehler", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 }
